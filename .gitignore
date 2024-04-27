@@ -1,6 +1,10 @@
 .ipynb_checkpoints
+.vscode
 *.mp3
 *.waw
 musdb18
 model
 Untitled.ipynb
+app/__pycache__
+app/build
+app/dist
