@@ -1,5 +1,5 @@
 import sys
-import os
+from os import path
 
 from PyQt6.QtGui import QGuiApplication
 from PyQt6.QtQml import QQmlApplicationEngine
@@ -10,7 +10,8 @@ app = QGuiApplication(sys.argv)
 
 engine = QQmlApplicationEngine()
 engine.quit.connect(app.quit)
-engine.load('./app.qml')
+
+engine.load(path.abspath(path.join(path.dirname(__file__), 'app.qml')))
 
 backend = Backend(engine)
 

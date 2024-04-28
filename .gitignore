@@ -9,3 +9,4 @@ app/model/Untitled.ipynb
 app/__pycache__
 app/build
 app/dist
+app/*.spec

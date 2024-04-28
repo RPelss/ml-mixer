@@ -1,3 +1,5 @@
+from os import path
+
 from model.return_value_threading import ReturnValueThread
 
 model = None
@@ -7,7 +9,9 @@ post_process = None
 def init():
     from model.model_data_pipelines import tf, pre_process, post_process
 
-    model = tf.keras.models.load_model('./model/model_800')
+    model = tf.keras.models.load_model(
+        path.abspath(path.join(path.dirname(__file__), 'model_800'))
+    )
 
     return model, pre_process, post_process
 

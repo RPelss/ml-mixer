@@ -12,7 +12,6 @@ model_sample_rate = 22050
 db_sample_rate = 44100
 
 # https://stackoverflow.com/questions/62558696/how-do-i-re-batch-a-tensor-in-tensorflow
-@tf.function(reduce_retracing=True)
 def sliding_window(x, axis=0):
     window_size = sliding_window_step
     stride = sliding_window_step
@@ -24,7 +23,6 @@ def sliding_window(x, axis=0):
     idx = r * stride + tf.range(window_size)
     return tf.gather(x, idx, axis=axis)
 
-@tf.function(reduce_retracing=True)
 def downsample(audio, source_sample_rate=db_sample_rate):
     return tfio.audio.resample(
         audio, 
@@ -32,7 +30,6 @@ def downsample(audio, source_sample_rate=db_sample_rate):
         model_sample_rate
     )
 
-@tf.function(reduce_retracing=True)
 def separate_imaginary(stft, return_angle=False):
     abs = tf.math.abs(stft)
     if return_angle:
@@ -57,7 +54,6 @@ def pre_process(audio, return_angle=False, source_sample_rate=db_sample_rate, is
     else:
         return sliding_window(abs)
     
-@tf.function
 def post_process_func(magnitudes, angles):
     return tf.reshape(
         tf.complex(
@@ -75,7 +71,6 @@ def post_process(stfts, angles):
         stfts
     ))
 
-@tf.function(reduce_retracing=True)
 def get_stft(audio):
     return tf.signal.stft(
         audio,
