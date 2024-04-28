@@ -4,25 +4,39 @@ from PyQt6.QtCore import (
     pyqtSignal
 )
 
-from audioFileReader import getAudio
+from audioPlayer import Player, PlayerState
 
 class Backend(QObject):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
-    setNewSong = pyqtSignal(str, float, arguments=['title, sample_count'])
+    setNewSong = pyqtSignal(str, float, arguments=['title', 'sample_count'])
+    setPlayerProgressBarValue = pyqtSignal(int)
     showOpenAudioFileDialog = pyqtSignal()
 
+    def __init__(self, engine, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.engine = engine
+        self.player = Player(
+            self,
+            songProgressCallback=lambda x: self.setPlayerProgressBarValue.emit(x)
+        )
+
     @pyqtSlot(str)
-    def onClicked(self, message):
+    def onFileOpenClicked(self):
         self.showOpenAudioFileDialog.emit()
-        self.setNewSong.emit(message, 0)
-        print("Button clicked :) by " + message)
 
     @pyqtSlot(float)
     def onSongProgressBarChanged(self, value):
-        print(f"Progess bar set to {value}")
+        self.player.userSetProgress(value)
 
     @pyqtSlot(str)
     def onFileDialogAccept(self, value):
-        getAudio(value)
+        name, sample_count = self.player.getAudioFromModel(value)
+        self.setNewSong.emit(name, sample_count)
+
+    @pyqtSlot()
+    def onPlayPauseClicked(self):
+        self.player.startPlayOrPausePlayback()
+
+    @pyqtSlot()
+    def onStopClicked(self):
+        self.player.setPlaybackState(PlayerState.STOPPED)  

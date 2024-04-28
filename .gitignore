@@ -2,9 +2,10 @@
 .vscode
 *.mp3
 *.waw
-musdb18
-model
-Untitled.ipynb
+*__pycache__*
+app/model/musdb18
+app/model/checkpoints
+app/model/Untitled.ipynb
 app/__pycache__
 app/build
 app/dist
