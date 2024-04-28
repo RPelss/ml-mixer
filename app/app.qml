@@ -11,6 +11,7 @@ ApplicationWindow {
     property QtObject backend
     property string songTitle: "-"
     property double timeSliderTo: 1 
+    property int maxColumns: 5
 
     Connections {
         target: backend
@@ -30,18 +31,18 @@ ApplicationWindow {
     }
 
     GridLayout  {
-        columns: 4
+        columns: maxColumns
         anchors.fill: parent
 
-        // Buttons
-
+        /** 
+            Buttons 
+        **/
         // Open
         Rectangle {
             width: 100; height: 100
             color: "white"
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.preferredWidth: 1
             MouseArea {
                 anchors.fill: parent
                 onClicked: backend.onFileOpenClicked()
@@ -58,7 +59,6 @@ ApplicationWindow {
             color: "white"
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.preferredWidth: 1
             MouseArea {
                 anchors.fill: parent
                 onClicked: backend.onPlayPauseClicked()
@@ -75,7 +75,6 @@ ApplicationWindow {
             color: "white"
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.preferredWidth: 1
             MouseArea {
                 anchors.fill: parent
                 onClicked: backend.onStopClicked()
@@ -101,7 +100,7 @@ ApplicationWindow {
             color: "white"
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.columnSpan: 4
+            Layout.columnSpan: maxColumns
             Slider {
                 id: progressBarSlider
                 objectName: "progressBarSlider"
@@ -121,14 +120,13 @@ ApplicationWindow {
             color: "white"
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.preferredWidth: 1
             Slider {
                 anchors.fill: parent
                 from: 0
                 to: 1
-                value: 0.25
+                value: 1
                 orientation: Qt.Vertical
-                // onMoved: backend.onSongProgressBarChanged(value);
+                onMoved: backend.onVolumeSliderChanged("MIX", value);
             }
         }
 
@@ -137,14 +135,13 @@ ApplicationWindow {
             color: "white"
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.preferredWidth: 1
             Slider {
                 anchors.fill: parent
                 from: 0
                 to: 1
-                value: 0.25
+                value: 1
                 orientation: Qt.Vertical
-                // onMoved: backend.onSongProgressBarChanged(value);
+                onMoved: backend.onVolumeSliderChanged("DRUMS", value);
             }
         }
 
@@ -153,14 +150,13 @@ ApplicationWindow {
             color: "white"
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.preferredWidth: 1
             Slider {
                 anchors.fill: parent
                 from: 0
                 to: 1
-                value: 0.25
+                value: 1
                 orientation: Qt.Vertical
-                // onMoved: backend.onSongProgressBarChanged(value);
+                onMoved: backend.onVolumeSliderChanged("BASS", value);
             }
         }
 
@@ -169,14 +165,28 @@ ApplicationWindow {
             color: "white"
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.preferredWidth: 1
             Slider {
                 anchors.fill: parent
                 from: 0
                 to: 1
-                value: 0.25
+                value: 1
                 orientation: Qt.Vertical
-                // onMoved: backend.onSongProgressBarChanged(value);
+                onMoved: backend.onVolumeSliderChanged("VOCALS", value);
+            }
+        }
+
+        Rectangle {
+            width: 100; height: 100
+            color: "white"
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Slider {
+                anchors.fill: parent
+                from: 0
+                to: 1
+                value: 1
+                orientation: Qt.Vertical
+                onMoved: backend.onVolumeSliderChanged("OTHER", value);
             }
         }
     }

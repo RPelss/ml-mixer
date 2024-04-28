@@ -1,10 +1,12 @@
+from enum import Enum
+
 from PyQt6.QtCore import (
-    QObject, 
+    QObject,
     pyqtSlot, 
     pyqtSignal
 )
 
-from audioPlayer import Player, PlayerState
+from audioPlayer import Player
 
 class Backend(QObject):
 
@@ -21,22 +23,31 @@ class Backend(QObject):
         )
 
     @pyqtSlot(str)
-    def onFileOpenClicked(self):
-        self.showOpenAudioFileDialog.emit()
-
-    @pyqtSlot(float)
-    def onSongProgressBarChanged(self, value):
-        self.player.userSetProgress(value)
-
-    @pyqtSlot(str)
     def onFileDialogAccept(self, value):
         name, sample_count = self.player.getAudioFromModel(value)
         self.setNewSong.emit(name, sample_count)
 
     @pyqtSlot()
+    def onFileOpenClicked(self):
+        self.showOpenAudioFileDialog.emit()
+
+    @pyqtSlot()
     def onPlayPauseClicked(self):
         self.player.startPlayOrPausePlayback()
 
+    @pyqtSlot(float)
+    def onSongProgressBarChanged(self, value):
+        self.player.userSetProgress(value)
+
     @pyqtSlot()
     def onStopClicked(self):
-        self.player.setPlaybackState(PlayerState.STOPPED)  
+        self.player.setPlaybackState(Player.State.STOPPED)  
+
+    @pyqtSlot(str, float)
+    def onVolumeSliderChanged(self, trackName, value):
+        self.player.userSetVolume(self.getTrackFromName(trackName), value)
+
+    def getTrackFromName(self, name):
+        for t in Player.Track:
+            if t.value == name:
+                return t
