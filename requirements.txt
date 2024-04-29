@@ -2,6 +2,7 @@ tensorflow==2.15
 tensorflow_io
 import_ipynb
 matplotlib
+soundfile
 librosa
 PyQt6
 PyInstaller==4.10

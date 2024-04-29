@@ -1,5 +1,3 @@
-from enum import Enum
-
 from PyQt6.QtCore import (
     QObject,
     pyqtSlot, 
@@ -10,6 +8,7 @@ from audioPlayer import Player
 
 class Backend(QObject):
 
+    showExportAudioFolderDialog = pyqtSignal()
     setNewSong = pyqtSignal(str, float, arguments=['title', 'sample_count'])
     setPlayerProgressBarValue = pyqtSignal(int)
     showOpenAudioFileDialog = pyqtSignal()
@@ -22,9 +21,18 @@ class Backend(QObject):
             songProgressCallback=lambda x: self.setPlayerProgressBarValue.emit(x)
         )
 
+    @pyqtSlot()
+    def onExportClicked(self):
+        if self.player.state != Player.State.NO_TRACK:
+            self.showExportAudioFolderDialog.emit()
+
     @pyqtSlot(str)
-    def onFileDialogAccept(self, value):
-        name, sample_count = self.player.getAudioFromModel(value)
+    def onExportFolderAccept(self, path):
+        self.player.exportTracks(path)
+
+    @pyqtSlot(str)
+    def onFileDialogAccept(self, path):
+        name, sample_count = self.player.getAudioFromModel(path)
         self.setNewSong.emit(name, sample_count)
 
     @pyqtSlot()

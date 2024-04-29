@@ -13,6 +13,10 @@ ApplicationWindow {
     property double timeSliderTo: 1 
     property int maxColumns: 5
 
+    function urlToPath(url) {
+        return url.toString().replace(/^(file:\/{3})/, "")
+    }
+
     Connections {
         target: backend
 
@@ -27,6 +31,10 @@ ApplicationWindow {
 
         function onShowOpenAudioFileDialog() {
             openAudioFileDialog.open()
+        }
+
+        function onShowExportAudioFolderDialog() {
+            exportAudioFileDialog.open()
         }
     }
 
@@ -50,6 +58,22 @@ ApplicationWindow {
             Text {
                 font.pixelSize: 24
                 text: "Open"
+            }
+        }
+
+        // Export
+        Rectangle {
+            width: 100; height: 100
+            color: "white"
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            MouseArea {
+                anchors.fill: parent
+                onClicked: backend.onExportClicked()
+            }
+            Text {
+                font.pixelSize: 24
+                text: "Export"
             }
         }
 
@@ -197,6 +221,12 @@ ApplicationWindow {
         rejectLabel: "Cancel"
         fileMode: FileDialog.OpenFile
         nameFilters: ["Audio files (*.wav *.mp3)"]
-        onAccepted: backend.onFileDialogAccept(selectedFile.toString().replace(/^(file:\/{3})/, ""))
+        onAccepted: backend.onFileDialogAccept(urlToPath(selectedFile))
+    }
+    FolderDialog {
+        id: exportAudioFileDialog
+        acceptLabel: "Select Folder"
+        rejectLabel: "Cancel"
+        onAccepted: backend.onExportFolderAccept(urlToPath(selectedFolder))
     }
 }

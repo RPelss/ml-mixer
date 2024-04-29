@@ -1,8 +1,10 @@
+import os
 from enum import Enum
 
 import librosa
 import pyaudio
 import numpy
+import soundfile as sf
 
 from PyQt6.QtCore import QTimer
 
@@ -35,6 +37,8 @@ class Player(object):
         Track.VOCALS: 1.0
     }
 
+    modelSampleRate = 22050
+
     def __init__(self, backend, songProgressCallback, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.backend = backend
@@ -55,7 +59,17 @@ class Player(object):
         }
 
         self.state = self.State.STOPPED
-        return path, len(self.tracks[self.Track.DRUMS])
+        self.name = os.path.basename(path)[:-4]
+
+        return self.name, len(self.tracks[self.Track.DRUMS])
+    
+    def exportTracks(self, path):
+        for key, audio in self.tracks.items():
+            sf.write(
+                os.path.join(path, f'{key.value}-{self.name}.wav'), 
+                audio, 
+                self.modelSampleRate
+            )
     
     def startPlayback(self):
         if self.state == self.State.NO_TRACK:
@@ -110,7 +124,7 @@ class Player(object):
         stream = p.open(
             format=1,
             channels=1,
-            rate=22050,
+            rate=self.modelSampleRate,
             output=True,
             stream_callback=callback
         )
