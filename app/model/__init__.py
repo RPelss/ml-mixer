@@ -1,33 +1,36 @@
 from os import path
 
-from model.return_value_threading import ReturnValueThread
+from PyQt6.QtCore import QObject
 
-model = None
-pre_process = None
-post_process = None
+from model.return_value_threading import ModelCallThread, ModelInitThread
 
-def init():
-    from model.model_data_pipelines import tf, pre_process, post_process
+class Model(QObject):
 
-    model = tf.keras.models.load_model(
-        path.abspath(path.join(path.dirname(__file__), 'model_800'))
-    )
+    model = None
+    pre_process = None
+    post_process = None
 
-    return model, pre_process, post_process
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-thread = ReturnValueThread(target=init)
-thread.start()
+        def onModelInitialised(result):
+            model, pre_process, post_process = result
+            self.model = model
+            self.pre_process = pre_process
+            self.post_process = post_process
 
-def predict(audio, sample_rate):
-    global model, pre_process, post_process
+        self.modelInitThread = ModelInitThread()
+        self.modelInitThread.modelInitialised.connect(onModelInitialised)
+        self.modelInitThread.start()
 
-    if model is None:
-        model, pre_process, post_process = thread.join()
+    def predict(self, audio, sample_rate, resultCallback):
 
-    stft, angles = pre_process(
-        audio, 
-        return_angle=True,
-        source_sample_rate=sample_rate,
-        is_audio_mono=True
-    )
-    return post_process(model(stft, training=False), angles)
+        def startThread():
+            self.modelCallThread = ModelCallThread(self, audio, sample_rate)
+            self.modelCallThread.modelReturnedResult.connect(resultCallback)
+            self.modelCallThread.start()
+
+        if self.modelInitThread.isFinished():
+            startThread()
+        else:
+            self.modelInitThread.finished.connect(startThread)

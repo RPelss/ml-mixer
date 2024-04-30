@@ -2,6 +2,7 @@
 .vscode
 *.mp3
 *.waw
+*.mp4
 *__pycache__*
 app/model/musdb18
 app/model/checkpoints

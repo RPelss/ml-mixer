@@ -6,3 +6,4 @@ soundfile
 librosa
 PyQt6
 PyInstaller==4.10
+stempeg
