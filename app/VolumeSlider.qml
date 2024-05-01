@@ -44,6 +44,7 @@ Rectangle {
             text: root.text
             font.pixelSize: 16
             Layout.alignment: Qt.AlignHCenter
+            font.family: balooCheetah.font.family
         }
 
         Slider {
@@ -99,10 +100,10 @@ Rectangle {
                     ColorAnimation { duration: 100 }
                 }
             }
-        }   
-    }
 
-    HoverHandler {
-        id: hover
+            HoverHandler {
+                id: hover
+            }
+        }   
     }
 }

@@ -13,6 +13,9 @@ ApplicationWindow {
     title: "HelloApp"
     color: Colors.background
 
+    minimumWidth: Math.max(fileButtonRow.implicitWidth, volumeSliders.implicitWidth) + 25
+    minimumHeight: 500
+
     property QtObject backend
     property int maxColumns: 5
     property int playerState: Player.NO_TRACK
@@ -59,22 +62,22 @@ ApplicationWindow {
             File Buttons 
         **/
         RowLayout {
-            spacing: 10
             id: fileButtonRow
+            spacing: 10
             Layout.fillWidth: true
             Layout.preferredHeight: 50
 
             // Open
             CustomButton {
                 text: "Open"
-                icon: "icons/plus.svg"
+                icon: "assets/icons/plus.svg"
                 onButtonClicked: backend.onFileOpenClicked()
             }
 
             // Export
             CustomButton {
                 text: "Export"
-                icon: "icons/save.svg"
+                icon: "assets/icons/save.svg"
                 enabled: playerState !== Player.NO_TRACK
                 onButtonClicked: backend.onExportClicked()
             }
@@ -82,7 +85,7 @@ ApplicationWindow {
             // Import
             CustomButton {
                 text: "Import"
-                icon: "icons/open.svg"
+                icon: "assets/icons/open.svg"
                 onButtonClicked: backend.onImportClicked()
             }
         }
@@ -100,14 +103,14 @@ ApplicationWindow {
                 id: playButton
                 iconSize: 80
                 enabled: playerState !== Player.NO_TRACK
-                icon: playerState === Player.PLAYING ? "icons/pause.svg" : "icons/play.svg"
+                icon: playerState === Player.PLAYING ? "assets/icons/pause.svg" : "assets/icons/play.svg"
                 onButtonClicked: backend.onPlayPauseClicked()
             }
 
             // Stop
             CustomButton {
                 iconSize: 80
-                icon: "icons/stop.svg"
+                icon: "assets/icons/stop.svg"
                 enabled: playerState !== Player.NO_TRACK
                 onButtonClicked: backend.onStopClicked()
             }
@@ -130,6 +133,7 @@ ApplicationWindow {
             Volume sliders 
         **/
         RowLayout {
+            id: volumeSliders
             spacing: 10
             Layout.fillHeight: true
             Layout.alignment: Qt.AlignHCenter
@@ -137,40 +141,46 @@ ApplicationWindow {
             // Mix
             VolumeSlider {
                 text: "Mix"
-                icon: "icons/mix.svg"
+                icon: "assets/icons/mix.svg"
                 enabled: playerState !== Player.NO_TRACK
                 onMoved: backend.onVolumeSliderChanged(Player.MIX, value);
             }
             // Drums
             VolumeSlider {
                 text: "Drums"
-                icon: "icons/drums.svg"
+                icon: "assets/icons/drums.svg"
                 enabled: playerState !== Player.NO_TRACK
                 onMoved: backend.onVolumeSliderChanged(Player.DRUMS, value);
             }
             // Bass
             VolumeSlider {
                 text: "Bass"
-                icon: "icons/guitar.svg"
+                icon: "assets/icons/guitar.svg"
                 enabled: playerState !== Player.NO_TRACK
                 onMoved: backend.onVolumeSliderChanged(Player.BASS, value);
             }
             // Vocals
             VolumeSlider {
                 text: "Vocals"
-                icon: "icons/microphone.svg"
+                icon: "assets/icons/microphone.svg"
                 enabled: playerState !== Player.NO_TRACK
                 onMoved: backend.onVolumeSliderChanged(Player.VOCALS, value);
             }
             // Others
             VolumeSlider {
                 text: "Others"
-                icon: "icons/piano.svg"
+                icon: "assets/icons/piano.svg"
                 enabled: playerState !== Player.NO_TRACK
                 onMoved: backend.onVolumeSliderChanged(Player.OTHER, value);
             }
         }
     }
+
+    FontLoader { 
+        id: balooCheetah
+        source: "assets/fonts/BalooChettan2-VariableFont_wght.ttf" 
+    }
+
     FileDialog {
         id: openAudioFileDialog
         acceptLabel: "Open"
@@ -179,6 +189,7 @@ ApplicationWindow {
         nameFilters: ["Audio files (*.wav *.mp3)"]
         onAccepted: backend.onFileDialogAccept(urlToPath(selectedFile))
     }
+
     FileDialog {
         id: importAudioFileDialog
         acceptLabel: "Open"
@@ -187,6 +198,7 @@ ApplicationWindow {
         nameFilters: ["Audio files (*.mp4 *.m4a)"]
         onAccepted: backend.onImportFileAccept(urlToPath(selectedFile))
     }
+
     FolderDialog {
         id: exportAudioFileDialog
         acceptLabel: "Select Folder"

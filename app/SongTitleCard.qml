@@ -20,21 +20,65 @@ Rectangle {
         spacing: 20
         uniformCellSizes: false
 
-        anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.fill: parent
         anchors.leftMargin: 20
 
         Image {
             id: image
-            source: "icons/note.svg"
-            sourceSize: Qt.size(root.iconSize, root.iconSize)
+            source: "assets/icons/note.svg"
             fillMode: Image.PreserveAspectFit
+            sourceSize: Qt.size(root.iconSize, root.iconSize)
         }
     
-        Text {
-            id: text
-            font.pixelSize: 32
-            text: root.text
+        Rectangle {
+            id: textContainer
+            clip: true
+            color: "transparent"
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+
+            function applyTextScroll() {
+                if (textContainer.width < text.width) {
+                    textScrollAnimation.running = true
+                }
+                else {
+                    textScrollAnimation.running = false
+                    text.x = 0
+                }
+            }
+
+            onWidthChanged: applyTextScroll()
+
+            PropertyAnimation {
+                id: textScrollAnimation
+                to: 0
+                target: text
+                property: "x"
+                duration: root.text.length * 200
+                loops: Animation.Infinite
+                from: textDouble.width
+            }
+
+            Text {
+                id: text
+                font.pixelSize: 32
+                font.family: balooCheetah.font.family
+                anchors.verticalCenter: parent.verticalCenter
+                text: root.text + (textScrollAnimation.running ? " | " : "")
+
+                onWidthChanged: textContainer.applyTextScroll()
+            }
+
+            Text {
+                id: textDouble
+                font.pixelSize: 32
+                text: root.text + " | "
+                anchors.right: text.left
+                visible: textScrollAnimation.running
+                font.family: balooCheetah.font.family
+                anchors.verticalCenter: parent.verticalCenter
+            }
         }
     }
 }
