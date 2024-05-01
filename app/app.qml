@@ -1,17 +1,21 @@
 import QtQuick
-import QtQuick.Controls
+import QtQuick.Controls.Basic
 import QtQuick.Layouts
 import QtQuick.Dialogs
 
+import AudioPlayer 1.0
+import "."
+
 ApplicationWindow {
     visible: true
-    width: 600
-    height: 500
+    width: 800
+    height: 600
     title: "HelloApp"
+    color: Colors.background
+
     property QtObject backend
-    property string songTitle: "-"
-    property double timeSliderTo: 1 
     property int maxColumns: 5
+    property int playerState: Player.NO_TRACK
 
     function urlToPath(url) {
         return url.toString().replace(/^(file:\/{3})/, "")
@@ -20,13 +24,13 @@ ApplicationWindow {
     Connections {
         target: backend
 
-        function onSetNewSong(title, sampleCount) {
-            songTitle = title
-            timeSliderTo = sampleCount
+        function onSetNewSong(title, songLengthSeconds) {
+            songTitle.text = title
+            progressBar.maxValueSeconds = songLengthSeconds
         }
 
-        function onSetPlayerProgressBarValue(newValue) {
-            progressBarSlider.value = newValue
+        function onSetPlayerProgressBarValue(newValueSeconds) {
+            progressBar.valueSeconds = newValueSeconds
         }
 
         function onShowOpenAudioFileDialog() {
@@ -36,185 +40,137 @@ ApplicationWindow {
         function onShowExportAudioFolderDialog() {
             exportAudioFileDialog.open()
         }
+
+        function onShowImportAudioFileDialog() {
+            importAudioFileDialog.open()
+        }
+
+        function onSongStateChange(newState) {
+            playerState = newState
+        }
     }
 
-    GridLayout  {
-        columns: maxColumns
+    ColumnLayout  {
+        spacing: 10
+        anchors.margins: 10
         anchors.fill: parent
 
         /** 
-            Buttons 
+            File Buttons 
         **/
-        // Open
-        Rectangle {
-            width: 100; height: 100
-            color: "white"
-            Layout.fillHeight: true
+        RowLayout {
+            spacing: 10
+            id: fileButtonRow
             Layout.fillWidth: true
-            MouseArea {
-                anchors.fill: parent
-                onClicked: backend.onFileOpenClicked()
-            }
-            Text {
-                font.pixelSize: 24
+            Layout.preferredHeight: 50
+
+            // Open
+            CustomButton {
                 text: "Open"
+                icon: "icons/plus.svg"
+                onButtonClicked: backend.onFileOpenClicked()
             }
-        }
 
-        // Export
-        Rectangle {
-            width: 100; height: 100
-            color: "white"
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            MouseArea {
-                anchors.fill: parent
-                onClicked: backend.onExportClicked()
-            }
-            Text {
-                font.pixelSize: 24
+            // Export
+            CustomButton {
                 text: "Export"
+                icon: "icons/save.svg"
+                enabled: playerState !== Player.NO_TRACK
+                onButtonClicked: backend.onExportClicked()
+            }
+
+            // Import
+            CustomButton {
+                text: "Import"
+                icon: "icons/open.svg"
+                onButtonClicked: backend.onImportClicked()
             }
         }
 
-        // Play / Pause / Resume
-        Rectangle {
-            width: 100; height: 100
-            color: "white"
-            Layout.fillHeight: true
+        /** 
+            Play, Stop, Name 
+        **/
+        RowLayout {
+            spacing: 10
             Layout.fillWidth: true
-            MouseArea {
-                anchors.fill: parent
-                onClicked: backend.onPlayPauseClicked()
-            }
-            Text {
-                font.pixelSize: 24
-                text: "Play"
-            }
-        }
+            implicitHeight: playButton.implicitHeight
 
-        // Stop
-        Rectangle {
-            width: 100; height: 100
-            color: "white"
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            MouseArea {
-                anchors.fill: parent
-                onClicked: backend.onStopClicked()
+            // Play / Pause / Resume
+            CustomButton {
+                id: playButton
+                iconSize: 80
+                enabled: playerState !== Player.NO_TRACK
+                icon: playerState === Player.PLAYING ? "icons/pause.svg" : "icons/play.svg"
+                onButtonClicked: backend.onPlayPauseClicked()
             }
-            Text {
-                font.pixelSize: 24
-                text: "Stop"
-            }
-        }
 
-        // Title
-        Text {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            Layout.columnSpan: 4
-            text: songTitle
-            font.pixelSize: 24
+            // Stop
+            CustomButton {
+                iconSize: 80
+                icon: "icons/stop.svg"
+                enabled: playerState !== Player.NO_TRACK
+                onButtonClicked: backend.onStopClicked()
+            }
+
+            // Title
+            SongTitleCard {
+                id: songTitle
+                text: songTitle
+            }
         }
 
         // Progress bar
-        Rectangle {
-            width: 100; height: 100
-            color: "white"
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            Layout.columnSpan: maxColumns
-            Slider {
-                id: progressBarSlider
-                objectName: "progressBarSlider"
-                anchors.fill: parent
-                from: 0
-                to: timeSliderTo
-                value: 0.25
-                stepSize: 1.0
-                // live: false
-                onMoved: backend.onSongProgressBarChanged(value);
-            }
+        AudioProgressBar {
+            id: progressBar
+            enabled: playerState !== Player.NO_TRACK
+            onMoved: backend.onSongProgressBarChanged(valueSeconds); 
         }
 
-        // Volume sliders
-        Rectangle {
-            width: 100; height: 100
-            color: "white"
+        /** 
+            Volume sliders 
+        **/
+        RowLayout {
+            spacing: 10
             Layout.fillHeight: true
-            Layout.fillWidth: true
-            Slider {
-                anchors.fill: parent
-                from: 0
-                to: 1
-                value: 1
-                orientation: Qt.Vertical
-                onMoved: backend.onVolumeSliderChanged("MIX", value);
-            }
-        }
+            Layout.alignment: Qt.AlignHCenter
 
-        Rectangle {
-            width: 100; height: 100
-            color: "white"
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            Slider {
-                anchors.fill: parent
-                from: 0
-                to: 1
-                value: 1
-                orientation: Qt.Vertical
-                onMoved: backend.onVolumeSliderChanged("DRUMS", value);
+            // Mix
+            VolumeSlider {
+                text: "Mix"
+                icon: "icons/mix.svg"
+                enabled: playerState !== Player.NO_TRACK
+                onMoved: backend.onVolumeSliderChanged(Player.MIX, value);
             }
-        }
-
-        Rectangle {
-            width: 100; height: 100
-            color: "white"
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            Slider {
-                anchors.fill: parent
-                from: 0
-                to: 1
-                value: 1
-                orientation: Qt.Vertical
-                onMoved: backend.onVolumeSliderChanged("BASS", value);
+            // Drums
+            VolumeSlider {
+                text: "Drums"
+                icon: "icons/drums.svg"
+                enabled: playerState !== Player.NO_TRACK
+                onMoved: backend.onVolumeSliderChanged(Player.DRUMS, value);
             }
-        }
-
-        Rectangle {
-            width: 100; height: 100
-            color: "white"
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            Slider {
-                anchors.fill: parent
-                from: 0
-                to: 1
-                value: 1
-                orientation: Qt.Vertical
-                onMoved: backend.onVolumeSliderChanged("VOCALS", value);
+            // Bass
+            VolumeSlider {
+                text: "Bass"
+                icon: "icons/guitar.svg"
+                enabled: playerState !== Player.NO_TRACK
+                onMoved: backend.onVolumeSliderChanged(Player.BASS, value);
             }
-        }
-
-        Rectangle {
-            width: 100; height: 100
-            color: "white"
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            Slider {
-                anchors.fill: parent
-                from: 0
-                to: 1
-                value: 1
-                orientation: Qt.Vertical
-                onMoved: backend.onVolumeSliderChanged("OTHER", value);
+            // Vocals
+            VolumeSlider {
+                text: "Vocals"
+                icon: "icons/microphone.svg"
+                enabled: playerState !== Player.NO_TRACK
+                onMoved: backend.onVolumeSliderChanged(Player.VOCALS, value);
+            }
+            // Others
+            VolumeSlider {
+                text: "Others"
+                icon: "icons/piano.svg"
+                enabled: playerState !== Player.NO_TRACK
+                onMoved: backend.onVolumeSliderChanged(Player.OTHER, value);
             }
         }
     }
-
     FileDialog {
         id: openAudioFileDialog
         acceptLabel: "Open"
@@ -222,6 +178,14 @@ ApplicationWindow {
         fileMode: FileDialog.OpenFile
         nameFilters: ["Audio files (*.wav *.mp3)"]
         onAccepted: backend.onFileDialogAccept(urlToPath(selectedFile))
+    }
+    FileDialog {
+        id: importAudioFileDialog
+        acceptLabel: "Open"
+        rejectLabel: "Cancel"
+        fileMode: FileDialog.OpenFile
+        nameFilters: ["Audio files (*.mp4 *.m4a)"]
+        onAccepted: backend.onImportFileAccept(urlToPath(selectedFile))
     }
     FolderDialog {
         id: exportAudioFileDialog

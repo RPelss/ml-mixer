@@ -10,15 +10,18 @@ class Backend(QObject):
 
     showExportAudioFolderDialog = pyqtSignal()
     setNewSong = pyqtSignal(str, float, arguments=['title', 'sample_count'])
-    setPlayerProgressBarValue = pyqtSignal(int)
+    setPlayerProgressBarValue = pyqtSignal(float)
+    showImportAudioFileDialog = pyqtSignal()
     showOpenAudioFileDialog = pyqtSignal()
+    songStateChange = pyqtSignal(int)
 
     def __init__(self, engine, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.engine = engine
         self.player = Player(
             self,
-            songProgressCallback=lambda x: self.setPlayerProgressBarValue.emit(x)
+            songProgressCallback=self.setPlayerProgressBarValue.emit,
+            stateChangeCallback=lambda x: self.songStateChange.emit(x.value)
         )
 
     @pyqtSlot()
@@ -32,12 +35,20 @@ class Backend(QObject):
 
     @pyqtSlot(str)
     def onFileDialogAccept(self, path):
-        name, sample_count = self.player.getAudioFromModel(path)
-        self.setNewSong.emit(name, sample_count)
+        self.player.getAudioFromModel(path, self.setNewSong.emit)
+        
+    @pyqtSlot(str)
+    def onImportFileAccept(self, path):
+        name, durationSeconds = self.player.importTracks(path)
+        self.setNewSong.emit(name, durationSeconds)
 
     @pyqtSlot()
     def onFileOpenClicked(self):
         self.showOpenAudioFileDialog.emit()
+
+    @pyqtSlot()
+    def onImportClicked(self):
+        self.showImportAudioFileDialog.emit()
 
     @pyqtSlot()
     def onPlayPauseClicked(self):
@@ -51,11 +62,11 @@ class Backend(QObject):
     def onStopClicked(self):
         self.player.setPlaybackState(Player.State.STOPPED)  
 
-    @pyqtSlot(str, float)
-    def onVolumeSliderChanged(self, trackName, value):
-        self.player.userSetVolume(self.getTrackFromName(trackName), value)
+    @pyqtSlot(int, float)
+    def onVolumeSliderChanged(self, enum, value):
+        self.player.userSetVolume(self.getTrackFromEnumValue(enum), value)
 
-    def getTrackFromName(self, name):
+    def getTrackFromEnumValue(self, value):
         for t in Player.Track:
-            if t.value == name:
+            if t.value == value:
                 return t
