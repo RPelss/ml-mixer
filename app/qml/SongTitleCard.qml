@@ -25,7 +25,7 @@ Rectangle {
 
         Image {
             id: image
-            source: "assets/icons/note.svg"
+            source: "../assets/icons/note.svg"
             fillMode: Image.PreserveAspectFit
             sourceSize: Qt.size(root.iconSize, root.iconSize)
         }

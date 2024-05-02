@@ -11,7 +11,7 @@ app = QGuiApplication(sys.argv)
 engine = QQmlApplicationEngine()
 engine.quit.connect(app.quit)
 
-engine.load(path.abspath(path.join(path.dirname(__file__), 'app.qml')))
+engine.load(path.abspath(path.join(path.dirname(__file__), 'qml/app.qml')))
 
 backend = Backend(engine)
 

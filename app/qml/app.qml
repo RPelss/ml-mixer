@@ -4,7 +4,7 @@ import QtQuick.Layouts
 import QtQuick.Dialogs
 
 import AudioPlayer 1.0
-import "./i18n"
+import "../i18n"
 import "."
 
 ApplicationWindow {
@@ -71,14 +71,14 @@ ApplicationWindow {
             // Open
             CustomButton {
                 text: i18n.t.common.new
-                icon: "assets/icons/plus.svg"
+                icon: "../assets/icons/plus.svg"
                 onButtonClicked: backend.onFileOpenClicked()
             }
 
             // Export
             CustomButton {
                 text: i18n.t.common.save
-                icon: "assets/icons/save.svg"
+                icon: "../assets/icons/save.svg"
                 enabled: playerState !== Player.NO_TRACK
                 onButtonClicked: backend.onExportClicked()
             }
@@ -86,13 +86,13 @@ ApplicationWindow {
             // Import
             CustomButton {
                 text: i18n.t.common.open
-                icon: "assets/icons/open.svg"
+                icon: "../assets/icons/open.svg"
                 onButtonClicked: backend.onImportClicked()
             }
 
             CustomButton {
                 text: i18n.t.common.about
-                icon: "assets/icons/info.svg"
+                icon: "../assets/icons/info.svg"
                 onButtonClicked: i18n.swap()
             }
         }
@@ -110,14 +110,14 @@ ApplicationWindow {
                 id: playButton
                 iconSize: 80
                 enabled: playerState !== Player.NO_TRACK
-                icon: playerState === Player.PLAYING ? "assets/icons/pause.svg" : "assets/icons/play.svg"
+                icon: playerState === Player.PLAYING ? "../assets/icons/pause.svg" : "../assets/icons/play.svg"
                 onButtonClicked: backend.onPlayPauseClicked()
             }
 
             // Stop
             CustomButton {
                 iconSize: 80
-                icon: "assets/icons/stop.svg"
+                icon: "../assets/icons/stop.svg"
                 enabled: playerState !== Player.NO_TRACK
                 onButtonClicked: backend.onStopClicked()
             }
@@ -148,40 +148,42 @@ ApplicationWindow {
             // Mix
             VolumeSlider {
                 text: i18n.t.tracks.mix
-                icon: "assets/icons/mix.svg"
+                icon: "../assets/icons/mix.svg"
                 enabled: playerState !== Player.NO_TRACK
                 onMoved: backend.onVolumeSliderChanged(Player.MIX, value);
             }
             // Drums
             VolumeSlider {
                 text: i18n.t.tracks.drums
-                icon: "assets/icons/drums.svg"
+                icon: "../assets/icons/drums.svg"
                 enabled: playerState !== Player.NO_TRACK
                 onMoved: backend.onVolumeSliderChanged(Player.DRUMS, value);
             }
             // Bass
             VolumeSlider {
                 text: i18n.t.tracks.bass
-                icon: "assets/icons/guitar.svg"
+                icon: "../assets/icons/guitar.svg"
                 enabled: playerState !== Player.NO_TRACK
                 onMoved: backend.onVolumeSliderChanged(Player.BASS, value);
             }
             // Vocals
             VolumeSlider {
                 text: i18n.t.tracks.vocals
-                icon: "assets/icons/microphone.svg"
+                icon: "../assets/icons/microphone.svg"
                 enabled: playerState !== Player.NO_TRACK
                 onMoved: backend.onVolumeSliderChanged(Player.VOCALS, value);
             }
             // Others
             VolumeSlider {
                 text: i18n.t.tracks.other
-                icon: "assets/icons/piano.svg"
+                icon: "../assets/icons/piano.svg"
                 enabled: playerState !== Player.NO_TRACK
                 onMoved: backend.onVolumeSliderChanged(Player.OTHER, value);
             }
         }
     }
+
+    
 
     FontLoader { 
         id: balooCheetah
