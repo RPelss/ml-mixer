@@ -9,6 +9,7 @@ Rectangle {
     radius: 20
     color: getButtonColor()
     Layout.minimumHeight: 40
+    Layout.minimumWidth: 40
     implicitHeight: layout.implicitHeight
     implicitWidth: layout.implicitWidth + (!!root.text ? 40 : 0 )
 

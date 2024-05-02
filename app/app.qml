@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import QtQuick.Dialogs
 
 import AudioPlayer 1.0
+import "./i18n"
 import "."
 
 ApplicationWindow {
@@ -69,14 +70,14 @@ ApplicationWindow {
 
             // Open
             CustomButton {
-                text: "Open"
+                text: i18n.t.common.new
                 icon: "assets/icons/plus.svg"
                 onButtonClicked: backend.onFileOpenClicked()
             }
 
             // Export
             CustomButton {
-                text: "Export"
+                text: i18n.t.common.save
                 icon: "assets/icons/save.svg"
                 enabled: playerState !== Player.NO_TRACK
                 onButtonClicked: backend.onExportClicked()
@@ -84,9 +85,15 @@ ApplicationWindow {
 
             // Import
             CustomButton {
-                text: "Import"
+                text: i18n.t.common.open
                 icon: "assets/icons/open.svg"
                 onButtonClicked: backend.onImportClicked()
+            }
+
+            CustomButton {
+                text: i18n.t.common.about
+                icon: "assets/icons/info.svg"
+                onButtonClicked: i18n.swap()
             }
         }
 
@@ -140,35 +147,35 @@ ApplicationWindow {
 
             // Mix
             VolumeSlider {
-                text: "Mix"
+                text: i18n.t.tracks.mix
                 icon: "assets/icons/mix.svg"
                 enabled: playerState !== Player.NO_TRACK
                 onMoved: backend.onVolumeSliderChanged(Player.MIX, value);
             }
             // Drums
             VolumeSlider {
-                text: "Drums"
+                text: i18n.t.tracks.drums
                 icon: "assets/icons/drums.svg"
                 enabled: playerState !== Player.NO_TRACK
                 onMoved: backend.onVolumeSliderChanged(Player.DRUMS, value);
             }
             // Bass
             VolumeSlider {
-                text: "Bass"
+                text: i18n.t.tracks.bass
                 icon: "assets/icons/guitar.svg"
                 enabled: playerState !== Player.NO_TRACK
                 onMoved: backend.onVolumeSliderChanged(Player.BASS, value);
             }
             // Vocals
             VolumeSlider {
-                text: "Vocals"
+                text: i18n.t.tracks.vocals
                 icon: "assets/icons/microphone.svg"
                 enabled: playerState !== Player.NO_TRACK
                 onMoved: backend.onVolumeSliderChanged(Player.VOCALS, value);
             }
             // Others
             VolumeSlider {
-                text: "Others"
+                text: i18n.t.tracks.other
                 icon: "assets/icons/piano.svg"
                 enabled: playerState !== Player.NO_TRACK
                 onMoved: backend.onVolumeSliderChanged(Player.OTHER, value);
@@ -181,10 +188,12 @@ ApplicationWindow {
         source: "assets/fonts/BalooChettan2-VariableFont_wght.ttf" 
     }
 
+    I18n {id: i18n}
+
     FileDialog {
         id: openAudioFileDialog
-        acceptLabel: "Open"
-        rejectLabel: "Cancel"
+        acceptLabel: i18n.t.fileDialog.open
+        rejectLabel: i18n.t.fileDialog.cancel
         fileMode: FileDialog.OpenFile
         nameFilters: ["Audio files (*.wav *.mp3)"]
         onAccepted: backend.onFileDialogAccept(urlToPath(selectedFile))
@@ -192,8 +201,8 @@ ApplicationWindow {
 
     FileDialog {
         id: importAudioFileDialog
-        acceptLabel: "Open"
-        rejectLabel: "Cancel"
+        acceptLabel: i18n.t.fileDialog.open
+        rejectLabel: i18n.t.fileDialog.cancel
         fileMode: FileDialog.OpenFile
         nameFilters: ["Audio files (*.mp4 *.m4a)"]
         onAccepted: backend.onImportFileAccept(urlToPath(selectedFile))
@@ -201,8 +210,8 @@ ApplicationWindow {
 
     FolderDialog {
         id: exportAudioFileDialog
-        acceptLabel: "Select Folder"
-        rejectLabel: "Cancel"
+        acceptLabel: i18n.t.fileDialog.openFolder
+        rejectLabel: i18n.t.fileDialog.cancel
         onAccepted: backend.onExportFolderAccept(urlToPath(selectedFolder))
     }
 }
