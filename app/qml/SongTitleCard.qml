@@ -67,7 +67,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 text: root.text + (textScrollAnimation.running ? " | " : "")
 
-                onWidthChanged: textContainer.applyTextScroll()
+                onTextChanged: textContainer.applyTextScroll()
             }
 
             Text {

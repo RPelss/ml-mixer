@@ -6,10 +6,13 @@ import "."
 
 Rectangle {
     id: root
+    clip: true
     radius: 20
     color: getButtonColor()
-    Layout.minimumHeight: 40
+    Layout.fillWidth: true
     Layout.minimumWidth: 40
+    Layout.minimumHeight: 40
+    Layout.maximumWidth: implicitWidth
     implicitHeight: layout.implicitHeight
     implicitWidth: layout.implicitWidth + (!!root.text ? 40 : 0 )
 
@@ -39,6 +42,7 @@ Rectangle {
         Image {
             id: image
             source: root.icon
+            visible: !!root.icon
             fillMode: Image.PreserveAspectFit
             sourceSize: Qt.size(root.iconSize, root.iconSize)
         }

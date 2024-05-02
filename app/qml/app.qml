@@ -8,9 +8,10 @@ import "../i18n"
 import "."
 
 ApplicationWindow {
-    visible: true
+    id: app
     width: 800
     height: 600
+    visible: true
     title: "HelloApp"
     color: Colors.background
 
@@ -93,7 +94,7 @@ ApplicationWindow {
             CustomButton {
                 text: i18n.t.common.about
                 icon: "../assets/icons/info.svg"
-                onButtonClicked: i18n.swap()
+                onButtonClicked: aboutModal.open()
             }
         }
 
@@ -183,19 +184,24 @@ ApplicationWindow {
         }
     }
 
-    
+    AboutModal {
+        id: aboutModal
+        visible: false
+        onOpen: visible = true;
+        onClose: visible = false;
+    }
 
     FontLoader { 
         id: balooCheetah
-        source: "assets/fonts/BalooChettan2-VariableFont_wght.ttf" 
+        source: "../assets/fonts/BalooChettan2-VariableFont_wght.ttf" 
     }
 
     I18n {id: i18n}
 
     FileDialog {
         id: openAudioFileDialog
-        acceptLabel: i18n.t.fileDialog.open
-        rejectLabel: i18n.t.fileDialog.cancel
+        acceptLabel: i18n.t.common.open
+        rejectLabel: i18n.t.common.cancel
         fileMode: FileDialog.OpenFile
         nameFilters: ["Audio files (*.wav *.mp3)"]
         onAccepted: backend.onFileDialogAccept(urlToPath(selectedFile))
@@ -203,8 +209,8 @@ ApplicationWindow {
 
     FileDialog {
         id: importAudioFileDialog
-        acceptLabel: i18n.t.fileDialog.open
-        rejectLabel: i18n.t.fileDialog.cancel
+        acceptLabel: i18n.t.common.open
+        rejectLabel: i18n.t.common.cancel
         fileMode: FileDialog.OpenFile
         nameFilters: ["Audio files (*.mp4 *.m4a)"]
         onAccepted: backend.onImportFileAccept(urlToPath(selectedFile))
@@ -212,8 +218,8 @@ ApplicationWindow {
 
     FolderDialog {
         id: exportAudioFileDialog
-        acceptLabel: i18n.t.fileDialog.openFolder
-        rejectLabel: i18n.t.fileDialog.cancel
+        acceptLabel: i18n.t.common.openFolder
+        rejectLabel: i18n.t.common.cancel
         onAccepted: backend.onExportFolderAccept(urlToPath(selectedFolder))
     }
 }

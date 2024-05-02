@@ -9,5 +9,6 @@ QtObject {
     property color black: '#000000'
     property color darkGray: '#BEBEBE'
     property color gray: '#D9D9D9'
+    property color translucentBackground: '#88BEBEBE'
     property color white: '#EEEEEE'
 }

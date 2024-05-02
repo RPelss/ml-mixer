@@ -6,7 +6,12 @@ import "en.mjs" as En
 QtObject {
     property var t: {Lv.t}
 
-    property var swap: () => {
-        t = t === Lv.t ? En.t : Lv.t
+    property var languages: ({
+        lv: (Lv.t),
+        en: (En.t)
+    })
+
+    property var changeLanguage: (to) => {
+        t = to
     }
 }
