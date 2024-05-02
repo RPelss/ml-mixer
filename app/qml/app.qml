@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import QtQuick.Dialogs
 
 import AudioPlayer 1.0
+import MLModel 1.0
 import "../i18n"
 import "."
 
@@ -21,6 +22,7 @@ ApplicationWindow {
     property QtObject backend
     property int maxColumns: 5
     property int playerState: Player.NO_TRACK
+    property int modelState: Model.INITIALISING
 
     function urlToPath(url) {
         return url.toString().replace(/^(file:\/{3})/, "")
@@ -29,7 +31,12 @@ ApplicationWindow {
     Connections {
         target: backend
 
+        function onModelStateChanged(newState) {
+            modelState = newState
+        }
+
         function onSetNewSong(title, songLengthSeconds) {
+            loadingScreen.close()
             songTitle.text = title
             progressBar.maxValueSeconds = songLengthSeconds
         }
@@ -50,7 +57,7 @@ ApplicationWindow {
             importAudioFileDialog.open()
         }
 
-        function onSongStateChange(newState) {
+        function onSongStateChanged(newState) {
             playerState = newState
         }
     }
@@ -184,6 +191,14 @@ ApplicationWindow {
         }
     }
 
+    LoadingScreen {
+        id: loadingScreen
+        visible: false
+        statusText: i18n.t.modelState[modelState]
+        onOpen: visible = true;
+        onClose: visible = false;
+    }
+
     AboutModal {
         id: aboutModal
         visible: false
@@ -204,7 +219,10 @@ ApplicationWindow {
         rejectLabel: i18n.t.common.cancel
         fileMode: FileDialog.OpenFile
         nameFilters: ["Audio files (*.wav *.mp3)"]
-        onAccepted: backend.onFileDialogAccept(urlToPath(selectedFile))
+        onAccepted: {
+            loadingScreen.open()
+            backend.onFileDialogAccept(urlToPath(selectedFile))
+        }
     }
 
     FileDialog {

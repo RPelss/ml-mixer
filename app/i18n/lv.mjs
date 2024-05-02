@@ -11,6 +11,13 @@ const t = {
         en: "English",
         lv: "Latviešu"
     },
+    modelState: [
+        "Inicializē modeli", // INITIALISING, 
+        "Apstrādā audio nodošanai modelim", // PRE_PROCESSING, 
+        "Gaida rezultātus no modeļa", // WAITING_FROM_MODEL, 
+        "Apstrādā modeļa rezultātus", // POST_PROCESSING, 
+        "...", // IDLING
+    ],
     tracks: {
         bass: "Bass",
         drums: "Bungas",

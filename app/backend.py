@@ -8,12 +8,13 @@ from audioPlayer import Player
 
 class Backend(QObject):
 
+    modelStateChanged = pyqtSignal(int)
     showExportAudioFolderDialog = pyqtSignal()
     setNewSong = pyqtSignal(str, float, arguments=['title', 'sample_count'])
     setPlayerProgressBarValue = pyqtSignal(float)
     showImportAudioFileDialog = pyqtSignal()
     showOpenAudioFileDialog = pyqtSignal()
-    songStateChange = pyqtSignal(int)
+    songStateChanged = pyqtSignal(int)
 
     def __init__(self, engine, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -21,7 +22,8 @@ class Backend(QObject):
         self.player = Player(
             self,
             songProgressCallback=self.setPlayerProgressBarValue.emit,
-            stateChangeCallback=lambda x: self.songStateChange.emit(x.value)
+            stateChangeCallback=lambda x: self.songStateChanged.emit(x.value),
+            modelStateChangeCallback=lambda x: self.modelStateChanged.emit(x.value)
         )
 
     @pyqtSlot()

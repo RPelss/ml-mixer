@@ -48,24 +48,24 @@ class Player(QObject):
             self, 
             backend, 
             songProgressCallback, 
-            stateChangeCallback, 
+            stateChangeCallback,
+            modelStateChangeCallback,
             *args, 
             **kwargs
         ):
         super().__init__(*args, **kwargs)
-        self.model = Model()
+        self.model = Model(modelStateChangeCallback)
         self.backend = backend
         self.songProgressCallback = songProgressCallback
         self.stateChangeCallback = stateChangeCallback
         self.__setState(self.State.NO_TRACK)
 
     def getAudioFromModel(self, path, resultCallback):
+        self.__setState(self.State.NO_TRACK)
         audio, sampleRate = sf.read(path)
         audio = numpy.transpose(audio)[0]
 
         def processModelResult(modelResult):
-            self.__setState(self.State.NO_TRACK)
-
             self.tracks = {
                 self.Track.DRUMS: modelResult[0],
                 self.Track.BASS: modelResult[1],

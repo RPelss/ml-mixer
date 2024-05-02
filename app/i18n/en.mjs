@@ -11,6 +11,13 @@ const t = {
         en: "English",
         lv: "Latviešu"
     },
+    modelState: [
+        "Initializing model", // INITIALISING, 
+        "Pre-processing audio", // PRE_PROCESSING, 
+        "Waiting for results from model", // WAITING_FROM_MODEL, 
+        "Post-processing model results", // POST_PROCESSING, 
+        "...", // IDLING
+    ],
     tracks: {
         bass: "Bass",
         drums: "Drums",
