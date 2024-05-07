@@ -3,6 +3,7 @@
 *.mp3
 *.waw
 *.mp4
+*.m4a
 *__pycache__*
 app/model/musdb18
 app/model/checkpoints

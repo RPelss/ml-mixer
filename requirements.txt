@@ -5,5 +5,6 @@ matplotlib
 soundfile
 librosa
 PyQt6
-PyInstaller==4.10
+PyInstaller==6.6.0
 stempeg
+pyaudio

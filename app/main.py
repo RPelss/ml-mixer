@@ -1,17 +1,23 @@
 import sys
-from os import path
+from os import environ, pathsep
 
-from PyQt6.QtGui import QGuiApplication
+from PyQt6.QtGui import QGuiApplication, QIcon
 from PyQt6.QtQml import QQmlApplicationEngine
+
+from utils import getFullPath
+
+environ["PATH"] += pathsep + getFullPath('ffmpeg/')
 
 from backend import Backend
 
 app = QGuiApplication(sys.argv)
 
+app.setWindowIcon(QIcon(getFullPath('assets/icon.ico')))
+
 engine = QQmlApplicationEngine()
 engine.quit.connect(app.quit)
 
-engine.load(path.abspath(path.join(path.dirname(__file__), 'qml/app.qml')))
+engine.load(getFullPath('qml/app.qml'))
 
 backend = Backend(engine)
 

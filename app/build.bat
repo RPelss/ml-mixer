@@ -1,13 +1,20 @@
 python -m PyInstaller main.py ^
+--clean ^
 --onefile ^
 --noconfirm ^
+--name "MM Mikseris" ^
 --contents-directory . ^
+--icon "assets\icon.ico" ^
 --hidden-import tensorflow_io ^
 --add-data .\model\model_800;.\model\model_800 ^
---add-data .\*.qml;. ^
---paths .\build_dlls ^
---add-binary %LOCALAPPDATA%\Packages\PythonSoftwareFoundation.Python.3.10_*^
-\LocalCache\local-packages\Python310\site-packages\scipy\linalg\_fblas.cp310-win_amd64.dll.a;. ^
---add-binary %LOCALAPPDATA%\Packages\PythonSoftwareFoundation.Python.3.10_*^
-\LocalCache\local-packages\Python310\site-packages\tensorflow_io\python\ops\*.so;^
-.\tensorflow_io\python\ops ^
+--add-data .\qml;.\qml ^
+--add-data .\i18n;.\i18n ^
+--add-data .\assets;.\assets ^
+--add-data %LOCALAPPDATA%\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_*\ffmpeg-*-full_build\bin\ffmpeg.exe;./ffmpeg ^
+--add-data %LOCALAPPDATA%\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_*\ffmpeg-*-full_build\bin\ffprobe.exe;./ffmpeg ^
+--paths %LOCALAPPDATA%\Packages\PythonSoftwareFoundation.Python.3.*\LocalCache\local-packages\Python3*\site-packages\numpy.libs ^
+--paths %LOCALAPPDATA%\Packages\PythonSoftwareFoundation.Python.3.*\LocalCache\local-packages\Python3*\site-packages\tensorflow\python ^
+--paths %LOCALAPPDATA%\Packages\PythonSoftwareFoundation.Python.3.*\LocalCache\local-packages\Python3*\site-packages\matplotlib.libs ^
+--paths %LOCALAPPDATA%\Packages\PythonSoftwareFoundation.Python.3.*\LocalCache\local-packages\Python3*\site-packages\scipy.libs ^
+--add-binary %LOCALAPPDATA%\Packages\PythonSoftwareFoundation.Python.3.*\LocalCache\local-packages\Python3*\site-packages\scipy\linalg\_fblas.cp3*-win_amd64.dll.a;. ^
+--add-binary %LOCALAPPDATA%\Packages\PythonSoftwareFoundation.Python.3.*\LocalCache\local-packages\Python3*\site-packages\tensorflow_io\python\ops\*.so;.\tensorflow_io\python\ops ^

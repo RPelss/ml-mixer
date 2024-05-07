@@ -1,5 +1,6 @@
 import os
 from enum import Enum
+import threading
 
 import pyaudio
 import numpy
@@ -90,12 +91,20 @@ class Player(QObject):
         for key, value in self.tracks.items():
             data[key] = numpy.transpose([value])
 
-        stempeg.write_stems(
-            path=os.path.join(path, f'{self.name}.mm-mikseris.m4a'),
-            data=data,
-            sample_rate=self.trackSampleRate,
-            writer=stempeg.ChannelsWriter()
-        )
+        def write():
+            try:
+                stempeg.write_stems(
+                    path=os.path.join(path, f'{self.name}.m4a'),
+                    data=data,
+                    sample_rate=self.trackSampleRate,
+                    writer=stempeg.ChannelsWriter()
+                )
+            except:
+                return
+
+        thread = threading.Thread(target=write, args=())
+
+        thread.start()
     
     def importTracks(self, path):
         stems, rate = stempeg.read_stems(

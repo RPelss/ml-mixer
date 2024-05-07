@@ -4,6 +4,8 @@ from enum import Enum
 from PyQt6.QtCore import QObject, QThread, pyqtSignal, pyqtEnum
 from PyQt6.QtQml import qmlRegisterType
 
+from utils import getFullPath
+
 class Model(QObject):
 
     @pyqtEnum
@@ -63,9 +65,7 @@ class ModelInitThread(QThread):
     def run(self):
         from model.model_data_pipelines import tf, pre_process, post_process
 
-        model = tf.keras.models.load_model(
-            path.abspath(path.join(path.dirname(__file__), 'model_800'))
-        )
+        model = tf.keras.models.load_model(getFullPath('model/model_800'))
 
         self.modelInitialised.emit((model, pre_process, post_process))
 

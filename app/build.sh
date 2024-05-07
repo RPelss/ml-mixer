@@ -1,0 +1,18 @@
+python3 -m PyInstaller main.py \
+--clean \
+--onefile \
+--noconfirm \
+--name "MM Mikseris" \
+--contents-directory . \
+--hidden-import tensorflow_io \
+--add-data ./model/model_800:./model/model_800 \
+--add-data ./qml:./qml \
+--add-data ./i18n:./i18n \
+--add-data ./assets:./assets \
+--add-data /usr/bin/ffmpeg:./ffmpeg \
+--add-data /usr/bin/ffprobe:./ffmpeg \
+--paths ~/.local/lib/python3.*/site-packages/numpy.libs/ \
+--paths ~/.local/lib/python3.*/site-packages/scipy.libs \
+--add-binary ~/.local/lib/python3.*/site-packages/scipy/linalg/_fblas.cpython-3*-x86_64-linux-gnu.so:. \
+--add-binary ~/.local/lib/python3.*/site-packages/tensorflow_io/python/ops/*.so:./tensorflow_io/python/ops \
+--add-binary /usr/lib/x86_64-linux-gnu/qt5/qml/Qt/labs/folderlistmodel/libqmlfolderlistmodelplugin.so:. \

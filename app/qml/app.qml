@@ -13,7 +13,7 @@ ApplicationWindow {
     width: 800
     height: 600
     visible: true
-    title: "HelloApp"
+    title: "MM Mikseris"
     color: Colors.background
 
     minimumWidth: Math.max(fileButtonRow.implicitWidth, volumeSliders.implicitWidth) + 25
@@ -133,7 +133,6 @@ ApplicationWindow {
             // Title
             SongTitleCard {
                 id: songTitle
-                text: songTitle
             }
         }
 
