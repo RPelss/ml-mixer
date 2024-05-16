@@ -75,7 +75,11 @@ class Backend(QObject):
     def onVolumeSliderChanged(self, enum, value):
         self.player.userSetVolume(self.__getTrackFromEnumValue(enum), value)
 
-    def getTrackFromEnumValue(self, value):
+    @pyqtProperty(str)
+    def version(self):
+        return getVersion()
+
+    def __getTrackFromEnumValue(self, value):
         for t in Player.Track:
             if t.value == value:
                 return t

@@ -1,15 +1,17 @@
+set /p version=<version
 python -m PyInstaller main.py ^
 --clean ^
 --onefile ^
 --noconfirm ^
---name "MM Mikseris" ^
+--name "MM-Mikseris-v.%version%" ^
 --contents-directory . ^
 --icon "assets\icon.ico" ^
 --hidden-import tensorflow_io ^
---add-data .\model\model_800;.\model\model_800 ^
+--add-data .\version;. ^
 --add-data .\qml;.\qml ^
 --add-data .\i18n;.\i18n ^
 --add-data .\assets;.\assets ^
+--add-data .\model\model_800;.\model\model_800 ^
 --add-data %LOCALAPPDATA%\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_*\ffmpeg-*-full_build\bin\ffmpeg.exe;./ffmpeg ^
 --add-data %LOCALAPPDATA%\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_*\ffmpeg-*-full_build\bin\ffprobe.exe;./ffmpeg ^
 --paths %LOCALAPPDATA%\Packages\PythonSoftwareFoundation.Python.3.*\LocalCache\local-packages\Python3*\site-packages\numpy.libs ^

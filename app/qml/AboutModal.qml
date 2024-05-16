@@ -54,7 +54,7 @@ Rectangle {
             Text {
                 id: credits
                 font.pixelSize: 16
-                text: i18n.t.credits
+                text: i18n.t.about.credits
                 wrapMode: Text.WordWrap
                 textFormat: Text.StyledText
                 linkColor: Colors.accentDark
@@ -64,6 +64,16 @@ Rectangle {
             }
 
             LanguageSwitch { id: languageSwitch }
+
+            Text {
+                id: versionText
+                font.pixelSize: 16
+                text: i18n.t.about.version + backend.version
+                wrapMode: Text.WordWrap
+                textFormat: Text.StyledText
+                font.family: balooChettan.font.family
+                Layout.maximumWidth: languageSwitch.implicitWidth
+            }
         }
     }
 }
