@@ -41,7 +41,7 @@ Rectangle {
                     font.pixelSize: 24
                     Layout.fillWidth: true
                     text: i18n.t.common.about
-                    font.family: balooCheetah.font.family
+                    font.family: balooChettan.font.family
                 }
 
                 CustomButton {
@@ -58,7 +58,7 @@ Rectangle {
                 wrapMode: Text.WordWrap
                 textFormat: Text.StyledText
                 linkColor: Colors.accentDark
-                font.family: balooCheetah.font.family
+                font.family: balooChettan.font.family
                 onLinkActivated: Qt.openUrlExternally(link)
                 Layout.maximumWidth: languageSwitch.implicitWidth
             }

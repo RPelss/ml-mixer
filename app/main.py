@@ -19,7 +19,7 @@ engine.quit.connect(app.quit)
 
 engine.load(getFullPath('qml/app.qml'))
 
-backend = Backend(engine)
+backend = Backend()
 
 engine.rootObjects()[0].setProperty('backend', backend)
 

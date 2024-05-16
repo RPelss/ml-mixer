@@ -1,7 +1,7 @@
 .ipynb_checkpoints
 .vscode
 *.mp3
-*.waw
+*.wav
 *.mp4
 *.m4a
 *__pycache__*

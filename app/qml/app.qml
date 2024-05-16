@@ -20,7 +20,6 @@ ApplicationWindow {
     minimumHeight: 500
 
     property QtObject backend
-    property int maxColumns: 5
     property int playerState: Player.NO_TRACK
     property int modelState: Model.INITIALISING
 
@@ -76,7 +75,7 @@ ApplicationWindow {
             Layout.fillWidth: true
             Layout.preferredHeight: 50
 
-            // Open
+            // New
             CustomButton {
                 text: i18n.t.common.new
                 icon: "../assets/icons/plus.svg"
@@ -98,6 +97,7 @@ ApplicationWindow {
                 onButtonClicked: backend.onImportClicked()
             }
 
+            // About
             CustomButton {
                 text: i18n.t.common.about
                 icon: "../assets/icons/info.svg"
@@ -206,7 +206,7 @@ ApplicationWindow {
     }
 
     FontLoader { 
-        id: balooCheetah
+        id: balooChettan
         source: "../assets/fonts/BalooChettan2-VariableFont_wght.ttf" 
     }
 

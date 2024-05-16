@@ -52,7 +52,7 @@ Rectangle {
             text: root.text
             font.pixelSize: 24
             visible: !!root.text
-            font.family: balooCheetah.font.family
+            font.family: balooChettan.font.family
         }
     }
 

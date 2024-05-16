@@ -44,7 +44,7 @@ Rectangle {
             text: root.text
             font.pixelSize: 16
             Layout.alignment: Qt.AlignHCenter
-            font.family: balooCheetah.font.family
+            font.family: balooChettan.font.family
         }
 
         Slider {

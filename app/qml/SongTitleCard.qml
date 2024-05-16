@@ -63,7 +63,7 @@ Rectangle {
             Text {
                 id: text
                 font.pixelSize: 32
-                font.family: balooCheetah.font.family
+                font.family: balooChettan.font.family
                 anchors.verticalCenter: parent.verticalCenter
                 text: root.text + (textScrollAnimation.running ? " | " : "")
 
@@ -76,7 +76,7 @@ Rectangle {
                 text: root.text + " | "
                 anchors.right: text.left
                 visible: textScrollAnimation.running
-                font.family: balooCheetah.font.family
+                font.family: balooChettan.font.family
                 anchors.verticalCenter: parent.verticalCenter
             }
         }

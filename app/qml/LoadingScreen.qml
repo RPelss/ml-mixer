@@ -95,7 +95,7 @@ Rectangle {
             anchors.centerIn: modal
             wrapMode: Text.WordWrap
             Layout.maximumWidth: 240
-            font.family: balooCheetah.font.family
+            font.family: balooChettan.font.family
             horizontalAlignment: Text.AlignHCenter
         }
     }

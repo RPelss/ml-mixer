@@ -18,9 +18,10 @@ class Model(QObject):
             IDLING
          ) = range(5)
 
-    model = None
-    pre_process = None
-    post_process = None
+    state = None
+    _model = None
+    _pre_process = None
+    _post_process = None
 
     def __init__(self, stateChangeCallback, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -29,9 +30,9 @@ class Model(QObject):
 
         def onModelInitialised(result):
             model, pre_process, post_process = result
-            self.model = model
-            self.pre_process = pre_process
-            self.post_process = post_process
+            self._model = model
+            self._pre_process = pre_process
+            self._post_process = post_process
             self.setState(self.State.IDLING)
 
         self.modelInitThread = ModelInitThread()
@@ -81,9 +82,9 @@ class ModelCallThread(QThread):
             **kwargs
         ):
         super().__init__(*args, **kwargs)
-        self.model = model.model
-        self.pre_process = model.pre_process
-        self.post_process = model.post_process
+        self.model = model._model
+        self.pre_process = model._pre_process
+        self.post_process = model._post_process
         self.stateChangeCallback = model.setState
         self.audio = audio
         self.sample_rate = sample_rate

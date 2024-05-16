@@ -24,7 +24,7 @@ Rectangle {
             font.pixelSize: 24
             Layout.columnSpan: 2
             text: i18n.t.languages.title
-            font.family: balooCheetah.font.family
+            font.family: balooChettan.font.family
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
         }
 

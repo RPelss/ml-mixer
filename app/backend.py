@@ -1,10 +1,12 @@
 from PyQt6.QtCore import (
     QObject,
     pyqtSlot, 
-    pyqtSignal
+    pyqtSignal,
+    pyqtProperty
 )
 
 from audioPlayer import Player
+from utils import getVersion
 
 class Backend(QObject):
 
@@ -16,9 +18,8 @@ class Backend(QObject):
     showOpenAudioFileDialog = pyqtSignal()
     songStateChanged = pyqtSignal(int)
 
-    def __init__(self, engine, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.engine = engine
         self.player = Player(
             self,
             songProgressCallback=self.setPlayerProgressBarValue.emit,
@@ -54,7 +55,13 @@ class Backend(QObject):
 
     @pyqtSlot()
     def onPlayPauseClicked(self):
-        self.player.startPlayOrPausePlayback()
+        match self.player.state:
+            case Player.State.PLAYING:
+                self.player.setPlaybackState(Player.State.PAUSED)
+            case Player.State.PAUSED:
+                self.player.setPlaybackState(Player.State.PLAYING)
+            case Player.State.STOPPED:
+                self.player.startPlayback()
 
     @pyqtSlot(float)
     def onSongProgressBarChanged(self, value):
@@ -66,7 +73,7 @@ class Backend(QObject):
 
     @pyqtSlot(int, float)
     def onVolumeSliderChanged(self, enum, value):
-        self.player.userSetVolume(self.getTrackFromEnumValue(enum), value)
+        self.player.userSetVolume(self.__getTrackFromEnumValue(enum), value)
 
     def getTrackFromEnumValue(self, value):
         for t in Player.Track:

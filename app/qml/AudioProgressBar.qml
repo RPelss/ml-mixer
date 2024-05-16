@@ -83,7 +83,7 @@ Rectangle {
     }
 
     Text {
-        font.family: balooCheetah.font.family
+        font.family: balooChettan.font.family
         anchors.top: slider.bottom
         anchors.left: root.left
         anchors.topMargin: -20
