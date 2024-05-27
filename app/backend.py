@@ -11,7 +11,7 @@ from utils import getVersion
 class Backend(QObject):
 
     modelStateChanged = pyqtSignal(int)
-    showExportAudioFolderDialog = pyqtSignal()
+    showExportAudioFileDialog = pyqtSignal(str)
     setNewSong = pyqtSignal(str, float, arguments=['title', 'sample_count'])
     setPlayerProgressBarValue = pyqtSignal(float)
     showImportAudioFileDialog = pyqtSignal()
@@ -30,10 +30,12 @@ class Backend(QObject):
     @pyqtSlot()
     def onExportClicked(self):
         if self.player.state != Player.State.NO_TRACK:
-            self.showExportAudioFolderDialog.emit()
+            self.showExportAudioFileDialog.emit(
+                f'{self.player.name}.mp4'
+            )
 
     @pyqtSlot(str)
-    def onExportFolderAccept(self, path):
+    def onExportFileAccept(self, path):
         self.player.exportTracks(path)
 
     @pyqtSlot(str)

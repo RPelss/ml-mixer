@@ -6,6 +6,10 @@ const t = {
         open: "Atvērt",
         save: "Saglabāt",
     },
+    fileFilters: {
+        mp3: "Audio faili (*.wav *.mp3)",
+        mp4: "Audio faili (*.mp4)"
+    },
     languages: {
         title: "Valoda:",
         en: "English",
@@ -24,9 +28,6 @@ const t = {
         mix: "Kopā",
         other: "Citi",
         vocals: "Vokāli"
-    },
-    fileDialog: {
-        openFolder: "Izvēlēties mapi",
     },
     about: {
         credits: "<p>Šo programmu un šeit izmantoto mašīnmācīšanās modeli izstrādāja Rūdolfs Pelšs 2024. gadā priekš LBTU bakalaura darba.</p>" 

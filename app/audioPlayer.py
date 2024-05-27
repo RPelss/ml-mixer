@@ -99,7 +99,7 @@ class Player(QObject):
         def write():
             try:
                 stempeg.write_stems(
-                    path=os.path.join(path, f'{self.name}.mp4'),
+                    path=path,
                     data=data,
                     sample_rate=self.__trackSampleRate,
                     writer=stempeg.ChannelsWriter()

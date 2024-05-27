@@ -48,7 +48,8 @@ ApplicationWindow {
             openAudioFileDialog.open()
         }
 
-        function onShowExportAudioFolderDialog() {
+        function onShowExportAudioFileDialog(defaultFile) {
+            exportAudioFileDialog.selectedFile = defaultFile
             exportAudioFileDialog.open()
         }
 
@@ -217,7 +218,7 @@ ApplicationWindow {
         acceptLabel: i18n.t.common.open
         rejectLabel: i18n.t.common.cancel
         fileMode: FileDialog.OpenFile
-        nameFilters: ["Audio files (*.wav *.mp3)"]
+        nameFilters: [i18n.t.fileFilters.mp3]
         onAccepted: {
             loadingScreen.open()
             backend.onFileDialogAccept(urlToPath(selectedFile))
@@ -229,14 +230,17 @@ ApplicationWindow {
         acceptLabel: i18n.t.common.open
         rejectLabel: i18n.t.common.cancel
         fileMode: FileDialog.OpenFile
-        nameFilters: ["Audio files (*.mp4 *.m4a)"]
+        nameFilters: [i18n.t.fileFilters.mp4]
         onAccepted: backend.onImportFileAccept(urlToPath(selectedFile))
     }
 
-    FolderDialog {
+    FileDialog {
         id: exportAudioFileDialog
-        acceptLabel: i18n.t.common.openFolder
+        defaultSuffix: "mp4"
+        acceptLabel: i18n.t.common.save
         rejectLabel: i18n.t.common.cancel
-        onAccepted: backend.onExportFolderAccept(urlToPath(selectedFolder))
+        fileMode: FileDialog.SaveFile
+        nameFilters: [i18n.t.fileFilters.mp4]
+        onAccepted: backend.onExportFileAccept(urlToPath(selectedFile))
     }
 }

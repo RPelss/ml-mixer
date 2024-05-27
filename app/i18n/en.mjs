@@ -6,6 +6,10 @@ const t = {
         open: "Open",
         save: "Save",
     },
+    fileFilters: {
+        mp3: "Audio files (*.wav *.mp3)",
+        mp4: "Audio files (*.mp4)"
+    },
     languages: {
         title: "Language:",
         en: "English",
@@ -24,9 +28,6 @@ const t = {
         mix: "Mix",
         other: "Other",
         vocals: "Vocals"
-    },
-    fileDialog: {
-        openFolder: "Select folder",
     },
     about: {
         credits: "<p>This program and the machine learning model used by it was developed by Rūdolfs Pelšs for his LBTU bachelor thesis in 2024.</p>" 
